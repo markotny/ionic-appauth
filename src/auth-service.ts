@@ -187,13 +187,17 @@ export class AuthService implements IAuthService {
     }
 
     protected async internalAuthorizationCallback(url: string){
-        this.browser.closeWindow();
+        await this.browser.closeWindow().catch(err => {
+            console.warn('Failed to close authorization callback browser window: ', err);
+        });
         await this.storage.setItem(AUTHORIZATION_RESPONSE_KEY, url);
         return this.requestHandler.completeAuthorizationRequestIfPossible();
     }
 
     protected async internalEndSessionCallback(){
-        this.browser.closeWindow();
+        await this.browser.closeWindow().catch(err => {
+            console.warn('Failed to close endSession callback browser window: ', err);
+        });
         this._actionHistory.clear();
         this.notifyActionListers(AuthActionBuilder.SignOutSuccess());
     }

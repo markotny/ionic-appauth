@@ -3,13 +3,13 @@ import { Browser as CapBrowser, OpenOptions } from '@capacitor/browser';
 import { Capacitor } from '@capacitor/core';
 
 export class CapacitorBrowser extends Browser {
-    public closeWindow(): void | Promise<void> {
+    public closeWindow(): Promise<void> {
         if(!CapBrowser)
             throw new Error("Capacitor Browser Is Undefined!");
             
-        if(Capacitor.getPlatform() !== 'android'){
-            CapBrowser.close();
-        }       
+        if (Capacitor.getPlatform() !== 'android') {
+            return CapBrowser.close();
+        }
     }
 
     public async showWindow(url: string): Promise<string | undefined> {
